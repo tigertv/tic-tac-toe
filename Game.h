@@ -4,25 +4,25 @@
 #include "Board.h"
 
 enum GameState {
-	PLAYING, DRAW, CROSS_WON, ZERO_WON
+    PLAYING, DRAW, CROSS_WON, ZERO_WON
 };
 
 enum Player {
-	PLAYER_CROSS, PLAYER_ZERO
+    PLAYER_CROSS, PLAYER_ZERO
 };
 
 class Game {
 private:
-	Board board;
-	GameState currentState;
-	Player currentPlayer;
-	void playerStep();
-	bool hasWon();
-	void switchPlayer();
+    Board board = Board(5, 5);
+    GameState currentState;
+    Player currentPlayer;
+    BoardCoords playerMove();
+    bool hasWon(int lastRow, int lastColumn);
+    void switchPlayer();
 public:
-	Game();
-	virtual ~Game();
-	void run();
+    Game();
+    virtual ~Game();
+    void run();
 
 };
 
