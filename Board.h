@@ -4,7 +4,7 @@
 #include <vector>
 
 enum BoardCell {
-    EMPTY, ZERO, CROSS, NULL_CELL
+    EMPTY, NULL_CELL, CROSS, ZERO
 };
 
 struct BoardCoords {

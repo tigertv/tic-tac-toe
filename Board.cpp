@@ -5,7 +5,7 @@
 Board::Board(int height, int width) {
     this->height = height;
     this->width = width;
-    this->cells = new BoardCell[width * height]{BoardCell::EMPTY};
+    this->cells = new BoardCell[width * height];
 }
 
 Board::~Board() {

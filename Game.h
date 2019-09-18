@@ -2,20 +2,18 @@
 #define GAME_H_
 
 #include "Board.h"
+#include "Player.h"
+#include <queue>
 
 enum GameState {
-    PLAYING, DRAW, CROSS_WON, ZERO_WON
-};
-
-enum Player {
-    PLAYER_CROSS, PLAYER_ZERO
+    PLAYING, DRAW, WIN
 };
 
 class Game {
 private:
     Board board = Board(5, 5);
     GameState currentState;
-    Player currentPlayer;
+    std::queue<Player> players;
     BoardCoords playerMove();
     bool hasWon(int lastRow, int lastColumn);
     void switchPlayer();
