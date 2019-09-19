@@ -2,31 +2,32 @@
 #include <iostream>
 #include <limits>
 
-Game::Game() {
+Game::Game(int boardSize) {
     this->currentState = GameState::PLAYING;
     Player player1(BoardCell::CROSS);
     Player player2(BoardCell::ZERO);
     this->players.push(player1);
     this->players.push(player2);
+    this->board = new Board(boardSize, boardSize);
 }
 
 Game::~Game() {
-
+    delete this->board;
 }
 
 void Game::run() {
     std::cout << "Game is running..." << std::endl;
-    this->board.show();
+    this->board->show();
 
     while (this->currentState == GameState::PLAYING) {
         BoardCoords c = this->playerMove();
-        this->board.show();
+        this->board->show();
 
         std::cout << std::endl;
 
         if (this->hasWon(c.row, c.column)) {
             this->currentState = GameState::WIN;
-        } else if (this->board.isFilled()) {
+        } else if (this->board->isFilled()) {
             this->currentState = GameState::DRAW;
         } else {
             this->switchPlayer();
@@ -60,7 +61,7 @@ BoardCoords Game::playerMove() {
     int row = 0;
     int column = 0;
 
-    while (wrongInput && !this->board.isFilled()) {
+    while (wrongInput && !this->board->isFilled()) {
         if(this->players.front().getSeed() == BoardCell::CROSS) {
             std::cout << "'X'";
         } else {
@@ -69,7 +70,7 @@ BoardCoords Game::playerMove() {
         std::cout << " is your turn. " << std::endl;
 
         do {
-            std::cout << "Input the row[1-" << this->board.getHeight() << "]: ";
+            std::cout << "Input the row[1-" << this->board->getHeight() << "]: ";
             std::cin >> row;
             if (std::cin.fail()) {
                 std::cin.clear();
@@ -77,10 +78,10 @@ BoardCoords Game::playerMove() {
                 continue;
             }
             row--;
-        } while (row >= this->board.getHeight() || row < 0 );
+        } while (row >= this->board->getHeight() || row < 0 );
 
         do {
-            std::cout << "Input the column[1-"<< this->board.getWidth() << "]: ";
+            std::cout << "Input the column[1-"<< this->board->getWidth() << "]: ";
             std::cin >> column;
             if (std::cin.fail()) {
                 std::cin.clear();
@@ -88,11 +89,11 @@ BoardCoords Game::playerMove() {
                 continue;
             }
             column--;
-        } while (column >= this->board.getWidth() || column < 0);
+        } while (column >= this->board->getWidth() || column < 0);
 
-        if (this->board.getCell(row, column) != BoardCell::EMPTY) continue;
+        if (this->board->getCell(row, column) != BoardCell::EMPTY) continue;
 
-        int ret = this->board.setCell(row, column, this->players.front().getSeed());
+        int ret = this->board->setCell(row, column, this->players.front().getSeed());
 
         switch(ret) {
         case 1:
@@ -130,7 +131,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
     // directions:
     // left down to right top
     for (int column = left, row = down; column <= right; column++, row--) {
-        if (cell == this->board.getCell(row, column)) {
+        if (cell == this->board->getCell(row, column)) {
             size++;
             if (size == line) return true;
         } else {
@@ -142,7 +143,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
 
     // left to right
     for (int column = left; column <= right; column++) {
-        if (cell == this->board.getCell(lastRow, column)) {
+        if (cell == this->board->getCell(lastRow, column)) {
             size++;
             if (size == line) return true;
         } else {
@@ -154,7 +155,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
 
     // left top to right down
     for (int column = left, row = up; column <= right; column++, row++) {
-        if (cell == this->board.getCell(row, column)) {
+        if (cell == this->board->getCell(row, column)) {
             size++;
             if (size == line) return true;
         } else {
@@ -166,7 +167,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
 
     // up to down
     for (int row = up; row <= down; row++) {
-        if (cell == this->board.getCell(row, lastColumn)) {
+        if (cell == this->board->getCell(row, lastColumn)) {
             size++;
             if (size == line) return true;
         } else {

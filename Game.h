@@ -11,14 +11,14 @@ enum GameState {
 
 class Game {
 private:
-    Board board = Board(5, 5);
+    Board *board;
     GameState currentState;
     std::queue<Player> players;
     BoardCoords playerMove();
     bool hasWon(int lastRow, int lastColumn);
     void switchPlayer();
 public:
-    Game();
+    Game(int boardSize);
     virtual ~Game();
     void run();
 
