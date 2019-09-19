@@ -4,8 +4,8 @@
 
 Game::Game(int boardSize) {
     this->currentState = GameState::PLAYING;
-    Player player1(BoardCell::CROSS);
-    Player player2(BoardCell::ZERO);
+    Player player1("X");
+    Player player2("O");
     this->players.push(player1);
     this->players.push(player2);
     this->board = new Board(boardSize, boardSize);
@@ -37,12 +37,8 @@ void Game::run() {
 
     switch(this->currentState) {
     case GameState::WIN:
-        if(this->players.front().getSeed() == BoardCell::CROSS) {
-            std::cout << "'X'";
-        } else {
-            std::cout << "'O'";
-        }
-        std::cout << " wins!!!" << std::endl;
+        std::cout << "'" << this->players.front().getSeed().getValue()
+                    << "' wins!!!" << std::endl;
         break;
 
     case GameState::DRAW:
@@ -62,12 +58,8 @@ BoardCoords Game::playerMove() {
     int column = 0;
 
     while (wrongInput && !this->board->isFilled()) {
-        if(this->players.front().getSeed() == BoardCell::CROSS) {
-            std::cout << "'X'";
-        } else {
-            std::cout << "'O'";
-        }
-        std::cout << " is your turn. " << std::endl;
+        std::cout << "'" << this->players.front().getSeed().getValue()
+                  << "' is your turn. " << std::endl;
 
         do {
             std::cout << "Input the row[1-" << this->board->getHeight() << "]: ";
@@ -91,7 +83,7 @@ BoardCoords Game::playerMove() {
             column--;
         } while (column >= this->board->getWidth() || column < 0);
 
-        if (this->board->getCell(row, column) != BoardCell::EMPTY) continue;
+        if (this->board->getCell(row, column).getValue() != " ") continue;
 
         int ret = this->board->setCell(row, column, this->players.front().getSeed());
 
@@ -131,7 +123,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
     // directions:
     // left down to right top
     for (int column = left, row = down; column <= right; column++, row--) {
-        if (cell == this->board->getCell(row, column)) {
+        if (cell.getValue() == this->board->getCell(row, column).getValue()) {
             size++;
             if (size == line) return true;
         } else {
@@ -143,7 +135,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
 
     // left to right
     for (int column = left; column <= right; column++) {
-        if (cell == this->board->getCell(lastRow, column)) {
+        if (cell.getValue() == this->board->getCell(lastRow, column).getValue()) {
             size++;
             if (size == line) return true;
         } else {
@@ -155,7 +147,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
 
     // left top to right down
     for (int column = left, row = up; column <= right; column++, row++) {
-        if (cell == this->board->getCell(row, column)) {
+        if (cell.getValue() == this->board->getCell(row, column).getValue()) {
             size++;
             if (size == line) return true;
         } else {
@@ -167,7 +159,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
 
     // up to down
     for (int row = up; row <= down; row++) {
-        if (cell == this->board->getCell(row, lastColumn)) {
+        if (cell.getValue() == this->board->getCell(row, lastColumn).getValue()) {
             size++;
             if (size == line) return true;
         } else {

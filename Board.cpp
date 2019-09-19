@@ -19,24 +19,7 @@ void Board::show() {
     for (int i = 0; i < this->height; ++i) {
         cout << line << endl;
         for (int j = 0; j < this->width; ++j) {
-            cout << " | ";
-            switch (this->cells[i * this->width + j]) {
-            case BoardCell::EMPTY:
-                cout << ' ';
-                break;
-
-            case BoardCell::ZERO:
-                cout << 'O';
-                break;
-
-            case BoardCell::CROSS:
-                cout << 'X';
-                break;
-
-            default:
-                cout << "ERROR";
-                break;
-            }
+            cout << " | " << this->cells[i * this->width + j].getValue();
         }
         cout << " |" << endl;
     }
@@ -51,15 +34,15 @@ int Board::setCell(int row, int column, BoardCell c) {
     int i = row * this->width + column;
 
     this->cells[i] = c;
-    if (c != BoardCell::EMPTY) {
+    if (c.getValue() != " ") {
         this->filledCells++;
     }
     return 0;
 }
 
 BoardCell Board::getCell(int row, int column) {
-    if (row < 0 || row >= this->height) return NULL_CELL;
-    if (column < 0 || column >= this->width) return NULL_CELL;
+    if (row < 0 || row >= this->height) return BoardCell("");
+    if (column < 0 || column >= this->width) return BoardCell("");
 
     int i = row * this->width + column;
     return this->cells[i];

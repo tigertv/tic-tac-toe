@@ -2,10 +2,7 @@
 #define BOARD_H_
 
 #include <vector>
-
-enum BoardCell {
-    EMPTY, NULL_CELL, CROSS, ZERO
-};
+#include "BoardCell.h"
 
 struct BoardCoords {
     int row;

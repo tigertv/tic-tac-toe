@@ -1,0 +1,17 @@
+#include "BoardCell.h"
+
+BoardCell::BoardCell() {
+    this->value = " ";
+}
+
+BoardCell::BoardCell(std::string value) {
+    this->value = value;
+}
+
+BoardCell::~BoardCell() {
+
+}
+
+std::string BoardCell::getValue() {
+    return this->value;
+}
