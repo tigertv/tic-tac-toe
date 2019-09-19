@@ -4,7 +4,7 @@
 #include "Game.h"
 
 void show_usage(std::string name) {
-    std::cerr << "Usage: " << name << " <option(s)>"
+    std::cerr << "Usage: " << name << " <option(s)>" << std::endl
         << "Options:" << std::endl
         << "\t-h,--help\t\tShow this help message" << std::endl
         << "\t-s,--size SIZE\tSpecify the size of the board (default = 3)" << std::endl
