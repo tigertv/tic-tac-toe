@@ -2,13 +2,14 @@
 #include <iostream>
 #include <limits>
 
-Game::Game(int boardSize) {
+Game::Game(int boardSize, int line) {
     this->currentState = GameState::PLAYING;
     Player player1("X");
     Player player2("O");
     this->players.push(player1);
     this->players.push(player2);
     this->board = new Board(boardSize, boardSize);
+    this->line = line;
 }
 
 Game::~Game() {
@@ -114,7 +115,7 @@ BoardCoords Game::playerMove() {
 bool Game::hasWon(int lastRow, int lastColumn) {
     BoardCell cell = this->players.front().getSeed();
 
-    const int line = 3;
+    const int line = this->line;
     int left = lastColumn - line + 1;
     int right = lastColumn + line - 1;
     int up = lastRow - line + 1;

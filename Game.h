@@ -13,6 +13,7 @@ class Game {
 private:
     Board *board;
     GameState currentState;
+    int line;
     std::queue<Player> players;
     BoardCoords playerMove();
     bool hasWon(int lastRow, int lastColumn);
@@ -20,7 +21,7 @@ private:
 
     int getInput(std::string message, int maxInput);
 public:
-    Game(int boardSize);
+    Game(int boardSize, int line);
     virtual ~Game();
     void run();
 
