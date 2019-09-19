@@ -27,9 +27,8 @@ int Game::getInput(std::string message, int maxInput) {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
             continue;
         }
-        ret--;
-    } while (ret >= maxInput || ret <= 0 );
-
+    } while (ret > maxInput || ret <= 0 );
+    ret--;
     return ret;
 }
 
@@ -69,8 +68,6 @@ void Game::run() {
 
     std::cout << "The game is over" << std::endl;
 }
-
-
 
 BoardCoords Game::playerMove() {
     bool wrongInput = true;
