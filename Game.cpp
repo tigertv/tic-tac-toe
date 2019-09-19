@@ -15,6 +15,23 @@ Game::~Game() {
     delete this->board;
 }
 
+int Game::getInput(std::string message, int maxInput) {
+    int ret = 0;
+
+    do {
+        std::cout << message;
+        std::cin >> ret;
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+            continue;
+        }
+        ret--;
+    } while (ret >= maxInput || ret <= 0 );
+
+    return ret;
+}
+
 void Game::run() {
     std::cout << "Game is running..." << std::endl;
     this->board->show();
@@ -52,6 +69,8 @@ void Game::run() {
     std::cout << "The game is over" << std::endl;
 }
 
+
+
 BoardCoords Game::playerMove() {
     bool wrongInput = true;
     int row = 0;
@@ -59,29 +78,12 @@ BoardCoords Game::playerMove() {
 
     while (wrongInput && !this->board->isFilled()) {
         std::cout << "'" << this->players.front().getSeed().getValue()
-                  << "' is your turn. " << std::endl;
+                << "' is your turn. " << std::endl;
 
-        do {
-            std::cout << "Input the row[1-" << this->board->getHeight() << "]: ";
-            std::cin >> row;
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-                continue;
-            }
-            row--;
-        } while (row >= this->board->getHeight() || row < 0 );
-
-        do {
-            std::cout << "Input the column[1-"<< this->board->getWidth() << "]: ";
-            std::cin >> column;
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-                continue;
-            }
-            column--;
-        } while (column >= this->board->getWidth() || column < 0);
+        row = this->getInput("Input the row[1-" + std::to_string(this->board->getHeight())
+            + "]: ", this->board->getHeight());
+        column = this->getInput("Input the column[1-" + std::to_string(this->board->getWidth())
+            + "]: ", this->board->getWidth());
 
         if (this->board->getCell(row, column).getValue() != " ") continue;
 

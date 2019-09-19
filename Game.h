@@ -17,6 +17,8 @@ private:
     BoardCoords playerMove();
     bool hasWon(int lastRow, int lastColumn);
     void switchPlayer();
+
+    int getInput(std::string message, int maxInput);
 public:
     Game(int boardSize);
     virtual ~Game();
