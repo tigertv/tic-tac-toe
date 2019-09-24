@@ -2,7 +2,7 @@
 #define GAME_H_
 
 #include "Board.h"
-#include "Player.h"
+#include "IPlayer.h"
 #include <queue>
 
 enum GameState {
@@ -14,17 +14,16 @@ private:
     Board *board;
     GameState currentState;
     int line;
-    std::queue<Player> players;
+    std::queue<IPlayer*> players;
     BoardCoords playerMove();
     bool hasWon(int lastRow, int lastColumn);
     void switchPlayer();
+    void clearScreen();
 
-    int getInput(std::string message, int maxInput);
 public:
     Game(int boardSize, int line);
     virtual ~Game();
     void run();
-
 };
 
 #endif

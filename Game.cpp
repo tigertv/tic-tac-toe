@@ -1,13 +1,18 @@
 #include "Game.h"
+#include "HumanPlayer.h"
+#include "AiPlayer.h"
 #include <iostream>
-#include <limits>
 
 Game::Game(int boardSize, int line) {
     this->currentState = GameState::PLAYING;
-    Player player1("X");
-    Player player2("O");
-    this->players.push(player1);
-    this->players.push(player2);
+
+    IPlayer *player;
+
+    player = new HumanPlayer("X");
+    this->players.push(player);
+    player = new AiPlayer("O");
+    this->players.push(player);
+
     this->board = new Board(boardSize, boardSize);
     this->line = line;
 }
@@ -16,54 +21,33 @@ Game::~Game() {
     delete this->board;
 }
 
-int Game::getInput(std::string message, int maxInput) {
-    int ret = 0;
-
-    do {
-        std::cout << message;
-        std::cin >> ret;
-        if (std::cin.fail()) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-            continue;
-        }
-    } while (ret > maxInput || ret <= 0 );
-    ret--;
-    return ret;
+void Game::clearScreen() {
+    if (system("clear") ) {}
 }
 
 void Game::run() {
+    this->clearScreen();
     std::cout << "Game is running..." << std::endl;
     this->board->show();
 
     while (this->currentState == GameState::PLAYING) {
         BoardCoords c = this->playerMove();
-        this->board->show();
 
+        this->clearScreen();
+        this->board->show();
         std::cout << std::endl;
 
         if (this->hasWon(c.row, c.column)) {
             this->currentState = GameState::WIN;
+            std::cout << "'" << this->players.front()->getSeed().getValue()
+                    << "' wins!!!" << std::endl;
         } else if (this->board->isFilled()) {
             this->currentState = GameState::DRAW;
+            std::cout << "Nobody wins!!!" << std::endl;
         } else {
             this->switchPlayer();
         }
 
-    }
-
-    switch(this->currentState) {
-    case GameState::WIN:
-        std::cout << "'" << this->players.front().getSeed().getValue()
-                    << "' wins!!!" << std::endl;
-        break;
-
-    case GameState::DRAW:
-        std::cout << "Nobody wins!!!" << std::endl;
-        break;
-
-    default:
-        break;
     }
 
     std::cout << "The game is over" << std::endl;
@@ -75,17 +59,16 @@ BoardCoords Game::playerMove() {
     int column = 0;
 
     while (wrongInput && !this->board->isFilled()) {
-        std::cout << "'" << this->players.front().getSeed().getValue()
+        IPlayer* currentPlayer = this->players.front();
+        std::cout << "'" << currentPlayer->getSeed().getValue()
                 << "' is your turn. " << std::endl;
 
-        row = this->getInput("Input the row[1-" + std::to_string(this->board->getHeight())
-            + "]: ", this->board->getHeight());
-        column = this->getInput("Input the column[1-" + std::to_string(this->board->getWidth())
-            + "]: ", this->board->getWidth());
-
+        BoardCoords coords = currentPlayer->move(this->board);
+        row = coords.row;
+        column = coords.column;
         if (this->board->getCell(row, column).getValue() != " ") continue;
 
-        int ret = this->board->setCell(row, column, this->players.front().getSeed());
+        int ret = this->board->setCell(row, column, currentPlayer->getSeed());
 
         switch(ret) {
         case 1:
@@ -110,7 +93,7 @@ BoardCoords Game::playerMove() {
 
 // checks only around the cell
 bool Game::hasWon(int lastRow, int lastColumn) {
-    BoardCell cell = this->players.front().getSeed();
+    BoardCell cell = this->players.front()->getSeed();
 
     const int line = this->line;
     int left = lastColumn - line + 1;
@@ -171,7 +154,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
 }
 
 void Game::switchPlayer() {
-    Player p = this->players.front();
+    IPlayer* p = this->players.front();
     this->players.pop();
     this->players.push(p);
 }
