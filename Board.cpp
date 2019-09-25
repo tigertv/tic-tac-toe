@@ -27,9 +27,9 @@ void Board::show() {
 }
 
 int Board::setCell(int row, int column, BoardCell c) {
-    if (row < 0 || row >= this->height) return 1;
-    if (column < 0 || column >= this->width) return 1;
-    if (this->isFilled()) return 2;
+    if (row < 0 || row >= this->height || column < 0 || column >= this->width) {
+        throw std::out_of_range ("the row or the column is out of range");
+    }
 
     int i = row * this->width + column;
 
@@ -66,4 +66,8 @@ int Board::getWidth() {
 
 int Board::getHeight() {
     return this->height;
+}
+
+bool Board::isEmptyCell(BoardCoords coords) {
+    return (this->getCell(coords).getValue() == " ");
 }

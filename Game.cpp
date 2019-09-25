@@ -55,39 +55,25 @@ void Game::run() {
 
 BoardCoords Game::playerMove() {
     bool wrongInput = true;
-    int row = 0;
-    int column = 0;
+    BoardCoords ret;
 
     while (wrongInput && !this->board->isFilled()) {
         IPlayer* currentPlayer = this->players.front();
         std::cout << "'" << currentPlayer->getSeed().getValue()
                 << "' is your turn. " << std::endl;
 
-        BoardCoords coords = currentPlayer->move(this->board);
-        row = coords.row;
-        column = coords.column;
-        if (this->board->getCell(row, column).getValue() != " ") continue;
+        ret = currentPlayer->move(this->board);
+        if (!this->board->isEmptyCell(ret)) continue;
 
-        int ret = this->board->setCell(row, column, currentPlayer->getSeed());
-
-        switch(ret) {
-        case 1:
+        try {
+            this->board->setCell(ret, currentPlayer->getSeed());
+            wrongInput = false;
+        } catch (std::out_of_range& e) {
+            std::cout << e.what() << std::endl;
             wrongInput = true;
-            break;
-
-        case 2:
-            this->currentState = GameState::DRAW;
-            wrongInput = false;
-            break;
-
-        default:
-            wrongInput = false;
-            break;
         }
-
     }
 
-    BoardCoords ret {row, column};
     return ret;
 }
 
