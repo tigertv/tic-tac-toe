@@ -6,9 +6,9 @@
 void show_usage(std::string name) {
     std::cerr << "Usage: " << name << " <option(s)>" << std::endl
         << "Options:" << std::endl
-        << "\t-h,--help\t\tShow this help message" << std::endl
-        << "\t-s,--size SIZE\tSpecify the size of the board (default = 3)" << std::endl
-        << "\t-l,--line LENGTH\tSpecify the length of the line to win (default = 3)" << std::endl;
+        << "  -h,--help         Show this help message" << std::endl
+        << "  -s,--size SIZE    Specify the size of the board (default = 3)" << std::endl
+        << "  -l,--line LENGTH  Specify the length of the line to win (default = 3)" << std::endl;
 }
 
 int main(int argc, char *argv[]) {
