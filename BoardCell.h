@@ -7,7 +7,7 @@ class BoardCell {
 private:
     std::string value;
 public:
-    BoardCell(std::string value);
+    BoardCell(const std::string& value);
     BoardCell();
     virtual ~BoardCell();
     std::string getValue();

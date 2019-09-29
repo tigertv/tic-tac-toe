@@ -6,10 +6,10 @@
 
 class Player {
 protected:
-    std::string seed;
+    BoardCell seed;
 public:
     virtual ~Player() {};
-    std::string getSeed() {
+    BoardCell& getSeed() {
         return this->seed;
     }
     virtual BoardCoords move(Board *board) = 0;

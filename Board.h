@@ -11,7 +11,8 @@ struct BoardCoords {
 
 class Board {
 private:
-    BoardCell *cells;
+    BoardCell emptyCell;
+    BoardCell **cells;
     int filledCells = 0;
     const int height;
     const int width;
@@ -20,8 +21,8 @@ public:
     Board(int height, int width);
     virtual ~Board();
     void show();
-    void setCell(BoardCoords coords, BoardCell c);
-    BoardCell getCell(BoardCoords coords);
+    void setCell(BoardCoords coords, BoardCell& c);
+    BoardCell& getCell(BoardCoords coords);
     bool isFilled();
     int getWidth();
     int getHeight();

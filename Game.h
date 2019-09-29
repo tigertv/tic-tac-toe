@@ -21,7 +21,7 @@ private:
     void switchPlayer();
     void clearScreen();
     Player* getCurrentPlayer();
-    bool checkLine(std::string& cell, int row, int column, int rowLimit, int columnLimit,
+    bool checkLine(BoardCell& cell, int row, int column, int rowLimit, int columnLimit,
             int rowPlus, int columnPlus);
 
 public:

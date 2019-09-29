@@ -4,7 +4,7 @@ BoardCell::BoardCell() {
     this->value = " ";
 }
 
-BoardCell::BoardCell(std::string value) {
+BoardCell::BoardCell(const std::string& value) {
     this->value = value;
 }
 

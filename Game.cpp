@@ -35,14 +35,15 @@ Player* Game::getCurrentPlayer() {
 }
 
 // TODO: change the ugly algorithm
-bool Game::checkLine(std::string& cell, int row, int column, int rowLimit, int columnLimit,
+bool Game::checkLine(BoardCell& cell, int row, int column, int rowLimit, int columnLimit,
         int rowPlus, int columnPlus) {
     int size = 0;
     for ( ; row <= rowLimit && column <= columnLimit; column += columnPlus, row += rowPlus) {
         if (row >= this->board->getWidth() || row < 0 || column >= this->board->getHeight()
                 || column < 0) continue;
+
         BoardCoords c{row, column};
-        if (cell == this->board->getCell(c).getValue()) {
+        if (&cell == &(this->board->getCell(c))) {
             size++;
             if (size == line) return true;
         } else {
@@ -66,7 +67,7 @@ void Game::run() {
 
         if (this->hasWon(move)) {
             this->currentState = GameState::WIN;
-            std::cout << "'" << this->getCurrentPlayer()->getSeed()
+            std::cout << "'" << this->getCurrentPlayer()->getSeed().getValue()
                     << "' wins!!!" << std::endl;
         } else if (this->board->isFilled()) {
             this->currentState = GameState::DRAW;
@@ -86,7 +87,7 @@ BoardCoords Game::playerMove() {
 
     while (wrongInput && !this->board->isFilled()) {
         Player* currentPlayer = this->getCurrentPlayer();
-        std::cout << "'" << currentPlayer->getSeed()
+        std::cout << "'" << currentPlayer->getSeed().getValue()
                 << "' is your turn. " << std::endl;
 
         ret = currentPlayer->move(this->board);
@@ -106,7 +107,7 @@ BoardCoords Game::playerMove() {
 
 // checks only around the cell
 bool Game::hasWon(BoardCoords lastMove) {
-    std::string cell = this->getCurrentPlayer()->getSeed();
+    BoardCell& cell = this->getCurrentPlayer()->getSeed();
 
     int lastRow = lastMove.row;
     int lastColumn = lastMove.column;
