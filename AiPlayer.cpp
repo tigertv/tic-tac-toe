@@ -6,16 +6,8 @@ AiPlayer::~AiPlayer() {
 
 }
 
-AiPlayer::AiPlayer(BoardCell seed) {
-    this->seed = seed;
-}
-
-BoardCell AiPlayer::getSeed() {
-    return this->seed;
-}
-
 AiPlayer::AiPlayer(std::string seed) {
-    this->seed = BoardCell(seed);
+    this->seed = seed;
 }
 
 BoardCoords AiPlayer::move(Board *board) {

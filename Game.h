@@ -2,8 +2,8 @@
 #define GAME_H_
 
 #include "Board.h"
-#include "IPlayer.h"
 #include <queue>
+#include "Player.h"
 
 enum GameState {
     PLAYING, DRAW, WIN
@@ -14,11 +14,12 @@ private:
     Board *board;
     GameState currentState;
     int line;
-    std::queue<IPlayer*> players;
+    std::queue<Player*> players;
     BoardCoords playerMove();
     bool hasWon(int lastRow, int lastColumn);
     void switchPlayer();
     void clearScreen();
+    Player* getCurrentPlayer();
 
 public:
     Game(int boardSize, int line);

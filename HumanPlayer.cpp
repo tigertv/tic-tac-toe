@@ -6,16 +6,8 @@ HumanPlayer::~HumanPlayer() {
 
 }
 
-HumanPlayer::HumanPlayer(BoardCell seed) {
-    this->seed = seed;
-}
-
-BoardCell HumanPlayer::getSeed() {
-    return this->seed;
-}
-
 HumanPlayer::HumanPlayer(std::string seed) {
-    this->seed = BoardCell(seed);
+    this->seed = seed;
 }
 
 BoardCoords HumanPlayer::move(Board *board) {

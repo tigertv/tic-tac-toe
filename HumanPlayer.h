@@ -1,19 +1,16 @@
 #ifndef HUMAN_PLAYER_H
 #define HUMAN_PLAYER_H
 
-#include "BoardCell.h"
-#include "IPlayer.h"
 #include <string>
+#include "Player.h"
 
-class HumanPlayer : public IPlayer {
+class HumanPlayer : public Player {
 private:
     int getInput(std::string message, int maxInput);
 public:
-    HumanPlayer(BoardCell seed);
     HumanPlayer(std::string seed);
     virtual ~HumanPlayer();
 
-    BoardCell getSeed();
     BoardCoords move(Board *board);
 };
 

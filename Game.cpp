@@ -6,7 +6,7 @@
 Game::Game(int boardSize, int line) {
     this->currentState = GameState::PLAYING;
 
-    IPlayer *player;
+    Player *player;
 
     player = new HumanPlayer("X");
     this->players.push(player);
@@ -25,6 +25,10 @@ void Game::clearScreen() {
     if (system("clear") ) {}
 }
 
+Player* Game::getCurrentPlayer() {
+    return this->players.front();
+}
+
 void Game::run() {
     this->clearScreen();
     std::cout << "Game is running..." << std::endl;
@@ -39,7 +43,7 @@ void Game::run() {
 
         if (this->hasWon(c.row, c.column)) {
             this->currentState = GameState::WIN;
-            std::cout << "'" << this->players.front()->getSeed().getValue()
+            std::cout << "'" << this->getCurrentPlayer()->getSeed()
                     << "' wins!!!" << std::endl;
         } else if (this->board->isFilled()) {
             this->currentState = GameState::DRAW;
@@ -58,8 +62,8 @@ BoardCoords Game::playerMove() {
     BoardCoords ret;
 
     while (wrongInput && !this->board->isFilled()) {
-        IPlayer* currentPlayer = this->players.front();
-        std::cout << "'" << currentPlayer->getSeed().getValue()
+        Player* currentPlayer = this->getCurrentPlayer();
+        std::cout << "'" << currentPlayer->getSeed()
                 << "' is your turn. " << std::endl;
 
         ret = currentPlayer->move(this->board);
@@ -79,7 +83,7 @@ BoardCoords Game::playerMove() {
 
 // checks only around the cell
 bool Game::hasWon(int lastRow, int lastColumn) {
-    BoardCell cell = this->players.front()->getSeed();
+    BoardCell cell = this->getCurrentPlayer()->getSeed();
 
     const int line = this->line;
     int left = lastColumn - line + 1;
@@ -140,7 +144,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
 }
 
 void Game::switchPlayer() {
-    IPlayer* p = this->players.front();
+    Player* p = this->getCurrentPlayer();
     this->players.pop();
     this->players.push(p);
 }
