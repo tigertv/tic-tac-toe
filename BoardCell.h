@@ -11,6 +11,7 @@ public:
     BoardCell();
     virtual ~BoardCell();
     std::string getValue();
+    bool isEmpty();
 };
 
 #endif

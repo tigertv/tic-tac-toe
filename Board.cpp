@@ -33,7 +33,7 @@ void Board::setCell(int row, int column, BoardCell c) {
 
     int i = row * this->width + column;
 
-    if (c.getValue() != " " && this->cells[i].getValue() == " ") {
+    if (!c.isEmpty() && this->cells[i].isEmpty()) {
         this->filledCells++;
     }
     this->cells[i] = c;

@@ -67,7 +67,7 @@ BoardCoords Game::playerMove() {
                 << "' is your turn. " << std::endl;
 
         ret = currentPlayer->move(this->board);
-        if (!this->board->isEmptyCell(ret)) continue;
+        if (!this->board->getCell(ret).isEmpty()) continue;
 
         try {
             this->board->setCell(ret, currentPlayer->getSeed());

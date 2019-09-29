@@ -15,3 +15,7 @@ BoardCell::~BoardCell() {
 std::string BoardCell::getValue() {
     return this->value;
 }
+
+bool BoardCell::isEmpty() {
+    return (this->value == " ");
+}
