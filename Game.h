@@ -16,7 +16,7 @@ private:
     int line;
     std::queue<Player*> players;
     BoardCoords playerMove();
-    bool hasWon(int lastRow, int lastColumn);
+    bool hasWon(BoardCoords lastMove);
     void switchPlayer();
     void clearScreen();
     Player* getCurrentPlayer();

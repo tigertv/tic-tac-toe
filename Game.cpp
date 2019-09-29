@@ -35,13 +35,13 @@ void Game::run() {
     this->board->show();
 
     while (this->currentState == GameState::PLAYING) {
-        BoardCoords c = this->playerMove();
+        BoardCoords move = this->playerMove();
 
         this->clearScreen();
         this->board->show();
         std::cout << std::endl;
 
-        if (this->hasWon(c.row, c.column)) {
+        if (this->hasWon(move)) {
             this->currentState = GameState::WIN;
             std::cout << "'" << this->getCurrentPlayer()->getSeed()
                     << "' wins!!!" << std::endl;
@@ -82,9 +82,11 @@ BoardCoords Game::playerMove() {
 }
 
 // checks only around the cell
-bool Game::hasWon(int lastRow, int lastColumn) {
-    BoardCell cell = this->getCurrentPlayer()->getSeed();
+bool Game::hasWon(BoardCoords lastMove) {
+    std::string cell = this->getCurrentPlayer()->getSeed();
 
+    int lastRow = lastMove.row;
+    int lastColumn = lastMove.column;
     const int line = this->line;
     int left = lastColumn - line + 1;
     int right = lastColumn + line - 1;
@@ -96,7 +98,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
     // directions:
     // left down to right top
     for (int column = left, row = down; column <= right; column++, row--) {
-        if (cell.getValue() == this->board->getCell(row, column).getValue()) {
+        if (cell == this->board->getCell(row, column).getValue()) {
             size++;
             if (size == line) return true;
         } else {
@@ -108,7 +110,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
 
     // left to right
     for (int column = left; column <= right; column++) {
-        if (cell.getValue() == this->board->getCell(lastRow, column).getValue()) {
+        if (cell == this->board->getCell(lastRow, column).getValue()) {
             size++;
             if (size == line) return true;
         } else {
@@ -120,7 +122,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
 
     // left top to right down
     for (int column = left, row = up; column <= right; column++, row++) {
-        if (cell.getValue() == this->board->getCell(row, column).getValue()) {
+        if (cell == this->board->getCell(row, column).getValue()) {
             size++;
             if (size == line) return true;
         } else {
@@ -132,7 +134,7 @@ bool Game::hasWon(int lastRow, int lastColumn) {
 
     // up to down
     for (int row = up; row <= down; row++) {
-        if (cell.getValue() == this->board->getCell(row, lastColumn).getValue()) {
+        if (cell == this->board->getCell(row, lastColumn).getValue()) {
             size++;
             if (size == line) return true;
         } else {
