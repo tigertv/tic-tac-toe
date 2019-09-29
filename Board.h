@@ -13,9 +13,9 @@ class Board {
 private:
     BoardCell *cells;
     int filledCells = 0;
-    int height;
-    int width;
-    int cellCount;
+    const int height;
+    const int width;
+    const int cellCount;
 public:
     Board(int height, int width);
     virtual ~Board();

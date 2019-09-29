@@ -2,10 +2,7 @@
 #include <iostream>
 #include <string>
 
-Board::Board(int height, int width) {
-    this->height = height;
-    this->width = width;
-    this->cellCount = width * height;
+Board::Board(int height, int width) : height(height), width(width), cellCount(width * height){
     this->cells = new BoardCell[this->cellCount];
 }
 
