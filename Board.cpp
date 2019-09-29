@@ -5,7 +5,8 @@
 Board::Board(int height, int width) {
     this->height = height;
     this->width = width;
-    this->cells = new BoardCell[width * height];
+    this->cellCount = width * height;
+    this->cells = new BoardCell[this->cellCount];
 }
 
 Board::~Board() {
@@ -43,7 +44,7 @@ void Board::setCell(BoardCoords coords, BoardCell c) {
 BoardCell Board::getCell(BoardCoords coords) {
     if (coords.row < 0 || coords.row >= this->height || coords.column < 0
             || coords.column >= this->width) {
-        return BoardCell("");
+        throw std::out_of_range ("the row or the column is out of range");
     }
 
     int i = coords.row * this->width + coords.column;
@@ -51,7 +52,7 @@ BoardCell Board::getCell(BoardCoords coords) {
 }
 
 bool Board::isFilled() {
-    return (this->filledCells == this->height * this->width );
+    return (this->filledCells == this->cellCount );
 }
 
 int Board::getWidth() {

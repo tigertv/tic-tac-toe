@@ -15,6 +15,7 @@ private:
     int filledCells = 0;
     int height;
     int width;
+    int cellCount;
 public:
     Board(int height, int width);
     virtual ~Board();
