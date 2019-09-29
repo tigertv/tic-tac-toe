@@ -33,11 +33,15 @@ int Board::setCell(int row, int column, BoardCell c) {
 
     int i = row * this->width + column;
 
-    this->cells[i] = c;
-    if (c.getValue() != " ") {
+    if (c.getValue() != " " && this->cells[i].getValue() == " ") {
         this->filledCells++;
     }
+    this->cells[i] = c;
     return 0;
+}
+
+int Board::setCell(BoardCoords coords, BoardCell c) {
+    return this->setCell(coords.row, coords.column, c);
 }
 
 BoardCell Board::getCell(int row, int column) {
@@ -46,10 +50,6 @@ BoardCell Board::getCell(int row, int column) {
 
     int i = row * this->width + column;
     return this->cells[i];
-}
-
-int Board::setCell(BoardCoords coords, BoardCell c) {
-    return this->setCell(coords.row, coords.column, c);
 }
 
 BoardCell Board::getCell(BoardCoords coords) {
