@@ -3,6 +3,7 @@
 
 #include "Board.h"
 #include <queue>
+#include <string>
 #include "Player.h"
 
 enum GameState {
@@ -20,6 +21,8 @@ private:
     void switchPlayer();
     void clearScreen();
     Player* getCurrentPlayer();
+    bool checkLine(std::string& cell, int row, int column, int rowLimit, int columnLimit,
+            int rowPlus, int columnPlus);
 
 public:
     Game(int boardSize, int line);

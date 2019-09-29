@@ -34,6 +34,24 @@ Player* Game::getCurrentPlayer() {
     return this->players.front();
 }
 
+// TODO: change the ugly algorithm
+bool Game::checkLine(std::string& cell, int row, int column, int rowLimit, int columnLimit,
+        int rowPlus, int columnPlus) {
+    int size = 0;
+    for ( ; row <= rowLimit && column <= columnLimit; column += columnPlus, row += rowPlus) {
+        if (row >= this->board->getWidth() || row < 0 || column >= this->board->getHeight()
+                || column < 0) continue;
+        BoardCoords c{row, column};
+        if (cell == this->board->getCell(c).getValue()) {
+            size++;
+            if (size == line) return true;
+        } else {
+            size = 0;
+        }
+    }
+    return false;
+}
+
 void Game::run() {
     this->clearScreen();
     std::cout << "Game is running..." << std::endl;
@@ -98,66 +116,15 @@ bool Game::hasWon(BoardCoords lastMove) {
     int up = lastRow - line + 1;
     int down = lastRow + line - 1;
 
-    int size = 0;
-
     // directions:
     // left down to right top
-    for (int column = left, row = down; column <= right; column++, row--) {
-        if (row >= this->board->getWidth() || row < 0 || column >= this->board->getHeight()
-                || column < 0) continue;
-        BoardCoords c{row, column};
-        if (cell == this->board->getCell(c).getValue()) {
-            size++;
-            if (size == line) return true;
-        } else {
-            size = 0;
-        }
-    }
-
-    size = 0;
-
+    if (this->checkLine(cell, down, left, down, right, -1, 1)) return true;
     // left to right
-    for (int column = left, row = lastRow; column <= right; column++) {
-        if (row >= this->board->getWidth() || row < 0 || column >= this->board->getHeight()
-                || column < 0) continue;
-        BoardCoords c{row, column};
-        if (cell == this->board->getCell(c).getValue()) {
-            size++;
-            if (size == line) return true;
-        } else {
-            size = 0;
-        }
-    }
-
-    size = 0;
-
+    if (this->checkLine(cell, lastRow, left, lastRow, right, 0, 1)) return true;
     // left top to right down
-    for (int column = left, row = up; column <= right; column++, row++) {
-        if (row >= this->board->getWidth() || row < 0 || column >= this->board->getHeight()
-                || column < 0) continue;
-        BoardCoords c{row, column};
-        if (cell == this->board->getCell(c).getValue()) {
-            size++;
-            if (size == line) return true;
-        } else {
-            size = 0;
-        }
-    }
-
-    size = 0;
-
+    if (this->checkLine(cell, up, left, down, right, 1, 1)) return true;
     // up to down
-    for (int row = up, column = lastColumn; row <= down; row++) {
-        if (row >= this->board->getWidth() || row < 0 || column >= this->board->getHeight()
-                || column < 0) continue;
-        BoardCoords c{row, column};
-        if (cell == this->board->getCell(c).getValue()) {
-            size++;
-            if (size == line) return true;
-        } else {
-            size = 0;
-        }
-    }
+    if (this->checkLine(cell, up, lastColumn, down, lastColumn, 1, 0)) return true;
 
     return false;
 }
