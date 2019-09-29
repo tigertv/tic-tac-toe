@@ -98,6 +98,8 @@ bool Game::hasWon(BoardCoords lastMove) {
     // directions:
     // left down to right top
     for (int column = left, row = down; column <= right; column++, row--) {
+        if (row >= this->board->getWidth() || row < 0 || column >= this->board->getHeight()
+                || column < 0) continue;
         BoardCoords c{row, column};
         if (cell == this->board->getCell(c).getValue()) {
             size++;
@@ -111,6 +113,8 @@ bool Game::hasWon(BoardCoords lastMove) {
 
     // left to right
     for (int column = left, row = lastRow; column <= right; column++) {
+        if (row >= this->board->getWidth() || row < 0 || column >= this->board->getHeight()
+                || column < 0) continue;
         BoardCoords c{row, column};
         if (cell == this->board->getCell(c).getValue()) {
             size++;
@@ -124,6 +128,8 @@ bool Game::hasWon(BoardCoords lastMove) {
 
     // left top to right down
     for (int column = left, row = up; column <= right; column++, row++) {
+        if (row >= this->board->getWidth() || row < 0 || column >= this->board->getHeight()
+                || column < 0) continue;
         BoardCoords c{row, column};
         if (cell == this->board->getCell(c).getValue()) {
             size++;
@@ -137,6 +143,8 @@ bool Game::hasWon(BoardCoords lastMove) {
 
     // up to down
     for (int row = up, column = lastColumn; row <= down; row++) {
+        if (row >= this->board->getWidth() || row < 0 || column >= this->board->getHeight()
+                || column < 0) continue;
         BoardCoords c{row, column};
         if (cell == this->board->getCell(c).getValue()) {
             size++;
