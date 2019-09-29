@@ -19,6 +19,11 @@ Game::Game(int boardSize, int line) {
 
 Game::~Game() {
     delete this->board;
+    while(!this->players.empty()) {
+        Player *player = this->players.front();
+        delete player;
+        this->players.pop();
+    }
 }
 
 void Game::clearScreen() {
