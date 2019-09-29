@@ -25,7 +25,6 @@ public:
     bool isFilled();
     int getWidth();
     int getHeight();
-    bool isEmptyCell(BoardCoords coords);
 };
 
 #endif

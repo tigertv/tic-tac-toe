@@ -59,7 +59,3 @@ int Board::getWidth() {
 int Board::getHeight() {
     return this->height;
 }
-
-bool Board::isEmptyCell(BoardCoords coords) {
-    return (this->getCell(coords).getValue() == " ");
-}
