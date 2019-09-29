@@ -19,9 +19,7 @@ public:
     Board(int height, int width);
     virtual ~Board();
     void show();
-    void setCell(int row, int column, BoardCell c);
     void setCell(BoardCoords coords, BoardCell c);
-    BoardCell getCell(int row, int column);
     BoardCell getCell(BoardCoords coords);
     bool isFilled();
     int getWidth();

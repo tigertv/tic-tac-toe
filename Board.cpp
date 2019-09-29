@@ -26,12 +26,13 @@ void Board::show() {
     cout << line << endl;
 }
 
-void Board::setCell(int row, int column, BoardCell c) {
-    if (row < 0 || row >= this->height || column < 0 || column >= this->width) {
-        throw std::out_of_range ("the row or the column is out of range");
+void Board::setCell(BoardCoords coords, BoardCell c) {
+    if (coords.row < 0 || coords.row >= this->height || coords.column < 0
+            || coords.column >= this->width) {
+            throw std::out_of_range ("the row or the column is out of range");
     }
 
-    int i = row * this->width + column;
+    int i = coords.row * this->width + coords.column;
 
     if (!c.isEmpty() && this->cells[i].isEmpty()) {
         this->filledCells++;
@@ -39,20 +40,14 @@ void Board::setCell(int row, int column, BoardCell c) {
     this->cells[i] = c;
 }
 
-void Board::setCell(BoardCoords coords, BoardCell c) {
-    this->setCell(coords.row, coords.column, c);
-}
-
-BoardCell Board::getCell(int row, int column) {
-    if (row < 0 || row >= this->height) return BoardCell("");
-    if (column < 0 || column >= this->width) return BoardCell("");
-
-    int i = row * this->width + column;
-    return this->cells[i];
-}
-
 BoardCell Board::getCell(BoardCoords coords) {
-    return this->getCell(coords.row, coords.column);
+    if (coords.row < 0 || coords.row >= this->height || coords.column < 0
+            || coords.column >= this->width) {
+        return BoardCell("");
+    }
+
+    int i = coords.row * this->width + coords.column;
+    return this->cells[i];
 }
 
 bool Board::isFilled() {
