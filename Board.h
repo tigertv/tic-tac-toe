@@ -19,6 +19,7 @@ private:
     const int cellCount;
 public:
     Board(int height, int width);
+    Board(const Board& board);
     virtual ~Board();
     void show();
     void setCell(BoardCoords coords, BoardCell& c);
@@ -26,6 +27,7 @@ public:
     bool isFilled();
     int getWidth();
     int getHeight();
+    std::vector<BoardCoords> getEmptyCells();
 };
 
 #endif

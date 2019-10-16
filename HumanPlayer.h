@@ -1,8 +1,10 @@
-#ifndef HUMAN_PLAYER_H
-#define HUMAN_PLAYER_H
+#ifndef HUMAN_PLAYER_H_
+#define HUMAN_PLAYER_H_
 
 #include <string>
 #include "Player.h"
+#include "Game.h"
+//class Game;
 
 class HumanPlayer : public Player {
 private:
@@ -11,7 +13,7 @@ public:
     HumanPlayer(std::string seed);
     virtual ~HumanPlayer();
 
-    BoardCoords move(Board *board);
+    GameMove askMove(const Game& game);
 };
 
 #endif

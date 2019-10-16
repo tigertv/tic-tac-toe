@@ -2,17 +2,19 @@
 #define PLAYER_H_
 
 #include "Board.h"
+#include "GameMove.h"
+#include "Game.h"
 #include <string>
+
+class Game;
 
 class Player {
 protected:
     BoardCell seed;
 public:
     virtual ~Player() {};
-    BoardCell& getSeed() {
-        return this->seed;
-    }
-    virtual BoardCoords move(Board *board) = 0;
+    BoardCell& getSeed();
+    virtual GameMove askMove(const Game& game) = 0;
 };
 
 #endif

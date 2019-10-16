@@ -3,15 +3,14 @@
 
 #include <string>
 #include "Player.h"
+#include "Game.h"
 
 class AiPlayer : public Player {
-private:
-
 public:
     AiPlayer(std::string seed);
     virtual ~AiPlayer();
 
-    BoardCoords move(Board *board);
+    GameMove askMove(const Game& game);
 };
 
 #endif

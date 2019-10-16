@@ -1,33 +1,38 @@
-#include "Game.h"
 #include "HumanPlayer.h"
 #include "AiPlayer.h"
+#include "Game.h"
 #include <iostream>
 
 Game::Game(int boardSize, int line) {
     this->currentState = GameState::PLAYING;
 
-    Player *player;
-
-    player = new HumanPlayer("X");
-    this->players.push(player);
-    player = new AiPlayer("O");
-    this->players.push(player);
+    this->players.push(new HumanPlayer("X"));
+    this->players.push(new AiPlayer("O"));
 
     this->board = new Board(boardSize, boardSize);
     this->line = line;
 }
 
+Game::Game(const Game &game) {
+    this->currentState = GameState::PLAYING;
+    this->line = game.line;
+    this->players = game.players;
+    this->board = new Board(*(game.board));
+}
+
 Game::~Game() {
     delete this->board;
+    /*
     while(!this->players.empty()) {
         Player *player = this->players.front();
         delete player;
         this->players.pop();
     }
+    //*/
 }
 
 void Game::clearScreen() {
-    if (system("clear") ) {}
+    //if (system("clear") ) {}
 }
 
 Player* Game::getCurrentPlayer() {
@@ -83,18 +88,18 @@ void Game::run() {
 
 BoardCoords Game::playerMove() {
     bool wrongInput = true;
-    BoardCoords ret;
+    BoardCoords coords;
 
     while (wrongInput && !this->board->isFilled()) {
         Player* currentPlayer = this->getCurrentPlayer();
         std::cout << "'" << currentPlayer->getSeed().getValue()
                 << "' is your turn. " << std::endl;
 
-        ret = currentPlayer->move(this->board);
-        if (!this->board->getCell(ret).isEmpty()) continue;
+        coords = currentPlayer->askMove(*this).getCoords();
+        if (!this->board->getCell(coords).isEmpty()) continue;
 
         try {
-            this->board->setCell(ret, currentPlayer->getSeed());
+            this->board->setCell(coords, currentPlayer->getSeed());
             wrongInput = false;
         } catch (std::out_of_range& e) {
             std::cout << e.what() << std::endl;
@@ -102,7 +107,7 @@ BoardCoords Game::playerMove() {
         }
     }
 
-    return ret;
+    return coords;
 }
 
 // checks only around the cell
@@ -134,4 +139,18 @@ void Game::switchPlayer() {
     Player* p = this->getCurrentPlayer();
     this->players.pop();
     this->players.push(p);
+}
+
+std::vector<GameMove> Game::getPossibleMoves() {
+    std::vector<GameMove> ret;
+    std::vector<BoardCoords> coords = this->board->getEmptyCells();
+    for(BoardCoords& item : coords) {
+        GameMove move(item);
+        ret.push_back(move);
+    }
+    return ret;
+}
+
+Board* Game::getBoard() {
+    return this->board;
 }

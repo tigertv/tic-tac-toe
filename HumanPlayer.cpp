@@ -10,15 +10,6 @@ HumanPlayer::HumanPlayer(std::string seed) {
     this->seed = seed;
 }
 
-BoardCoords HumanPlayer::move(Board *board) {
-    BoardCoords coords;
-    coords.row = this->getInput("Input the row[1-" + std::to_string(board->getHeight())
-        + "]: ", board->getHeight());
-    coords.column = this->getInput("Input the column[1-" + std::to_string(board->getWidth())
-        + "]: ", board->getWidth());
-    return coords;
-}
-
 int HumanPlayer::getInput(std::string message, int maxInput) {
     int ret = 0;
 
@@ -34,3 +25,18 @@ int HumanPlayer::getInput(std::string message, int maxInput) {
     ret--;
     return ret;
 }
+
+GameMove HumanPlayer::askMove(const Game &game) {
+    BoardCoords coords;
+    Game humanGame = game;
+    Board* board = humanGame.getBoard();
+
+    coords.row = this->getInput("Input the row[1-" + std::to_string(board->getHeight())
+        + "]: ", board->getHeight());
+    coords.column = this->getInput("Input the column[1-" + std::to_string(board->getWidth())
+        + "]: ", board->getWidth());
+
+    GameMove move(coords);
+    return move;
+}
+

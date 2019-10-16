@@ -9,6 +9,14 @@ Board::Board(int height, int width) : height(height), width(width), cellCount(wi
     }
 }
 
+Board::Board(const Board& board) : height(board.height), width(board.width), cellCount(board.cellCount) {
+    this->cells = new BoardCell*[board.cellCount];
+    for (int i = 0; i < this->cellCount; i++) {
+        this->cells[i] = board.cells[i];
+    }
+    this->filledCells = board.filledCells;
+}
+
 Board::~Board() {
     delete[] this->cells;
 }
@@ -61,4 +69,17 @@ int Board::getWidth() {
 
 int Board::getHeight() {
     return this->height;
+}
+
+std::vector<BoardCoords> Board::getEmptyCells() {
+    std::vector<BoardCoords> ret;
+    for (int i = 0; i < this->cellCount; i++) {
+        if(this->cells[i]->isEmpty()) {
+            BoardCoords coords;
+            coords.row = i / this->width;
+            coords.column = i % this->width;
+            ret.push_back(coords);
+        }
+    }
+    return ret;
 }

@@ -1,14 +1,17 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+#include "GameMove.h"
+#include "Player.h"
 #include "Board.h"
 #include <queue>
 #include <string>
-#include "Player.h"
 
 enum GameState {
     PLAYING, DRAW, WIN
 };
+
+class Player;
 
 class Game {
 private:
@@ -18,7 +21,6 @@ private:
     std::queue<Player*> players;
     BoardCoords playerMove();
     bool hasWon(BoardCoords lastMove);
-    void switchPlayer();
     void clearScreen();
     Player* getCurrentPlayer();
     bool checkLine(BoardCell& cell, int row, int column, int rowLimit, int columnLimit,
@@ -26,8 +28,12 @@ private:
 
 public:
     Game(int boardSize, int line);
+    Game(const Game& game);
     virtual ~Game();
     void run();
+    void switchPlayer();
+    std::vector<GameMove> getPossibleMoves();
+    Board* getBoard();
 };
 
 #endif
