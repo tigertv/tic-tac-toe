@@ -6,11 +6,14 @@
 #include "Game.h"
 
 class AiPlayer : public Player {
+private:
+    int minimax(Game& game);
 public:
     AiPlayer(std::string seed);
     virtual ~AiPlayer();
 
     GameMove askMove(const Game& game);
+
 };
 
 #endif

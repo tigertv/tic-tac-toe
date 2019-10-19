@@ -28,6 +28,7 @@ public:
     int getWidth();
     int getHeight();
     std::vector<BoardCoords> getEmptyCells();
+    void clearCell(BoardCoords coords);
 };
 
 #endif

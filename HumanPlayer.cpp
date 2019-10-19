@@ -26,7 +26,7 @@ int HumanPlayer::getInput(std::string message, int maxInput) {
     return ret;
 }
 
-GameMove HumanPlayer::askMove(const Game &game) {
+GameMove HumanPlayer::askMove(const Game& game) {
     BoardCoords coords;
     Game humanGame = game;
     Board* board = humanGame.getBoard();

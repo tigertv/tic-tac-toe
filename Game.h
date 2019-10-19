@@ -19,10 +19,8 @@ private:
     GameState currentState;
     int line;
     std::queue<Player*> players;
-    BoardCoords playerMove();
-    bool hasWon(BoardCoords lastMove);
+    GameMove playerMove();
     void clearScreen();
-    Player* getCurrentPlayer();
     bool checkLine(BoardCell& cell, int row, int column, int rowLimit, int columnLimit,
             int rowPlus, int columnPlus);
 
@@ -30,10 +28,16 @@ public:
     Game(int boardSize, int line);
     Game(const Game& game);
     virtual ~Game();
+
     void run();
     void switchPlayer();
     std::vector<GameMove> getPossibleMoves();
     Board* getBoard();
+    Player* getCurrentPlayer();
+    bool makeMove(GameMove& move);
+    bool unmakeMove(GameMove& move);
+    bool hasWon(GameMove& lastMove);
+
 };
 
 #endif

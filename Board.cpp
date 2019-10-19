@@ -83,3 +83,8 @@ std::vector<BoardCoords> Board::getEmptyCells() {
     }
     return ret;
 }
+
+void Board::clearCell(BoardCoords coords) {
+    this->setCell(coords, this->emptyCell);
+    this->filledCells--;
+}

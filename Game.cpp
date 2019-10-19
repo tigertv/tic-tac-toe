@@ -64,7 +64,7 @@ void Game::run() {
     this->board->show();
 
     while (this->currentState == GameState::PLAYING) {
-        BoardCoords move = this->playerMove();
+        GameMove move = this->playerMove();
 
         this->clearScreen();
         this->board->show();
@@ -86,36 +86,31 @@ void Game::run() {
     std::cout << "The game is over" << std::endl;
 }
 
-BoardCoords Game::playerMove() {
+GameMove Game::playerMove() {
     bool wrongInput = true;
     BoardCoords coords;
-
+    GameMove move(coords);
     while (wrongInput && !this->board->isFilled()) {
         Player* currentPlayer = this->getCurrentPlayer();
         std::cout << "'" << currentPlayer->getSeed().getValue()
                 << "' is your turn. " << std::endl;
 
-        coords = currentPlayer->askMove(*this).getCoords();
-        if (!this->board->getCell(coords).isEmpty()) continue;
-
-        try {
-            this->board->setCell(coords, currentPlayer->getSeed());
+        move = currentPlayer->askMove(*this);
+        if (this->makeMove(move)) {
             wrongInput = false;
-        } catch (std::out_of_range& e) {
-            std::cout << e.what() << std::endl;
+        } else {
             wrongInput = true;
         }
     }
-
-    return coords;
+    return move;
 }
 
 // checks only around the cell
-bool Game::hasWon(BoardCoords lastMove) {
+bool Game::hasWon(GameMove& lastMove) {
     BoardCell& cell = this->getCurrentPlayer()->getSeed();
-
-    int lastRow = lastMove.row;
-    int lastColumn = lastMove.column;
+    BoardCoords coords = lastMove.getCoords();
+    int lastRow = coords.row;
+    int lastColumn = coords.column;
     const int line = this->line;
     int left = lastColumn - line + 1;
     int right = lastColumn + line - 1;
@@ -142,15 +137,40 @@ void Game::switchPlayer() {
 }
 
 std::vector<GameMove> Game::getPossibleMoves() {
-    std::vector<GameMove> ret;
+    std::vector<GameMove> moves;
     std::vector<BoardCoords> coords = this->board->getEmptyCells();
     for(BoardCoords& item : coords) {
         GameMove move(item);
-        ret.push_back(move);
+        moves.push_back(move);
     }
-    return ret;
+    return moves;
 }
 
 Board* Game::getBoard() {
     return this->board;
+}
+
+bool Game::makeMove(GameMove &move) {
+    BoardCoords coords = move.getCoords();
+    if (!this->board->getCell(coords).isEmpty()) return false;
+
+    try {
+        this->board->setCell(coords, this->getCurrentPlayer()->getSeed());
+        return true;
+    } catch (std::out_of_range& e) {
+        std::cout << e.what() << std::endl;
+        return false;
+    }
+}
+
+bool Game::unmakeMove(GameMove &move) {
+    BoardCoords coords = move.getCoords();
+    try {
+        this->board->clearCell(coords);
+        return true;
+    } catch (std::out_of_range& e) {
+        std::cout << e.what() << std::endl;
+        return false;
+    }
+    return true;
 }
