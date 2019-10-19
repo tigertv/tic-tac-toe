@@ -23,6 +23,7 @@ private:
     void clearScreen();
     bool checkLine(BoardCell& cell, int row, int column, int rowLimit, int columnLimit,
             int rowPlus, int columnPlus);
+    bool checkLine(GameMove& move, int dRow, int dColumn);
 
 public:
     Game(int boardSize, int line);

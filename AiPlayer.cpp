@@ -1,6 +1,4 @@
 #include "AiPlayer.h"
-#include <random>
-#include <chrono>
 #include <iostream>
 
 AiPlayer::~AiPlayer() {
@@ -11,34 +9,30 @@ AiPlayer::AiPlayer(std::string seed) {
     this->seed = seed;
 }
 
-int AiPlayer::minimax(Game &game) {
+int AiPlayer::negamax(Game &game, int depth, int alpha, int beta) {
+    if (depth == 0) return 0;
     std::vector<GameMove> moves = game.getPossibleMoves();
     int size = moves.size();
     if (size == 0) return 0;
-    int max = 0;
-    bool isSet = false;
+
     for (int i = 0; i < size; i++) {
         if (game.makeMove(moves[i])) {
             if (game.hasWon(moves[i])) {
-                max = 10;
                 game.unmakeMove(moves[i]);
-                break;
+                return 10;
             } else {
                 game.switchPlayer();
-                int ret = - this->minimax(game);
-                if (!isSet) {
-                    isSet = true;
-                    max = ret;
-                } else if (ret > max) {
-                    max = ret;
-                }
+                int ret = - this->negamax(game, depth - 1, -beta, -alpha);
                 game.switchPlayer();
                 game.unmakeMove(moves[i]);
+
+                if(ret >= beta ) return beta;
+                if(ret > alpha ) alpha = ret;
             }
 
         }
     }
-    return max;
+    return alpha;
 }
 
 GameMove AiPlayer::askMove(const Game& game) {
@@ -46,28 +40,26 @@ GameMove AiPlayer::askMove(const Game& game) {
     std::vector<GameMove> moves = aigame.getPossibleMoves();
     int size = moves.size();
     int bestMove = 0;
-    int max = 0;
-    bool isSet = false;
+    int alpha = -10000;
+    int beta = 10000;
+
     for (int i = 0; i < size; i++) {
         if (aigame.makeMove(moves[i])) {
             if (aigame.hasWon(moves[i])) {
-                max = 10;
-                bestMove = i;
-                aigame.unmakeMove(moves[i]);
-                break;
+                return moves[i];
             } else {
                 aigame.switchPlayer();
-                int ret = - this->minimax(aigame);
-                if (!isSet) {
-                    max = ret;
-                    isSet = true;
-                } else if (ret > max) {
-                    max = ret;
+
+                int ret = - this->negamax(aigame, 4, -beta, -alpha);
+
+                if (ret >= beta) return moves[i];
+                if (ret > alpha) {
+                    alpha = ret;
                     bestMove = i;
                 }
 
-                aigame.switchPlayer();
                 aigame.unmakeMove(moves[i]);
+                aigame.switchPlayer();
             }
 
         }

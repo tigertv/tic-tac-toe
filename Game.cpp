@@ -105,6 +105,57 @@ GameMove Game::playerMove() {
     return move;
 }
 
+bool Game::checkLine(GameMove &move, int dRow, int dColumn) {
+    int size = 1;
+    BoardCell& cell = this->getCurrentPlayer()->getSeed();
+    BoardCoords coords = move.getCoords();
+    int row = coords.row + dRow;
+    int column = coords.column + dColumn;
+    int columnLimit = coords.column + this->line * dColumn;
+    int rowLimit = coords.row + this->line * dRow;
+
+    for (; row < rowLimit && column < columnLimit; column += dColumn, row += dRow) {
+        BoardCoords c{row, column};
+        if (&cell == &(this->board->getCell(c))) {
+            size++;
+        } else {
+            break;
+        }
+    }
+
+    rowLimit = coords.row - this->line * dRow;
+    columnLimit = coords.column - this->line * dColumn;
+    row = coords.row - dRow;
+    column = coords.column - dColumn;
+    for (; row > rowLimit && column > columnLimit; column -= dColumn, row -= dRow) {
+        BoardCoords c{row, column};
+        if (&cell == &(this->board->getCell(c))) {
+            size++;
+        } else {
+            break;
+        }
+    }
+
+    if (size >= this->line) return true;
+    return false;
+
+    /*
+    for ( ; row <= rowLimit && column <= columnLimit; column += columnPlus, row += rowPlus) {
+        if (row >= this->board->getWidth() || row < 0 || column >= this->board->getHeight()
+                || column < 0) continue;
+
+        BoardCoords c{row, column};
+        if (&cell == &(this->board->getCell(c))) {
+            size++;
+            if (size == line) return true;
+        } else {
+            size = 0;
+        }
+    }
+    //*/
+    return false;
+}
+
 // checks only around the cell
 bool Game::hasWon(GameMove& lastMove) {
     BoardCell& cell = this->getCurrentPlayer()->getSeed();
@@ -119,15 +170,14 @@ bool Game::hasWon(GameMove& lastMove) {
 
     // directions:
     // left down to right top
-    if (this->checkLine(cell, down, left, down, right, -1, 1)) return true;
-    // left to right
-    if (this->checkLine(cell, lastRow, left, lastRow, right, 0, 1)) return true;
-    // left top to right down
-    if (this->checkLine(cell, up, left, down, right, 1, 1)) return true;
-    // up to down
-    if (this->checkLine(cell, up, lastColumn, down, lastColumn, 1, 0)) return true;
-
-    return false;
+    return (this->checkLine(cell, down, left, down, right, -1, 1)) ||
+    //        return (this->checkLine(lastMove, -1, 1)) ||
+                    // left to right
+        (this->checkLine(cell, lastRow, left, lastRow, right, 0, 1)) ||
+        // left top to right down
+        (this->checkLine(cell, up, left, down, right, 1, 1)) ||
+        // up to down
+        (this->checkLine(cell, up, lastColumn, down, lastColumn, 1, 0));
 }
 
 void Game::switchPlayer() {

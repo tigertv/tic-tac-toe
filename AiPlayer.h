@@ -7,7 +7,7 @@
 
 class AiPlayer : public Player {
 private:
-    int minimax(Game& game);
+    int negamax(Game& game, int depth, int alpha, int beta);
 public:
     AiPlayer(std::string seed);
     virtual ~AiPlayer();
