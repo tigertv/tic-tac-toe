@@ -10,7 +10,7 @@ AiPlayer::AiPlayer(std::string seed) {
 }
 
 int AiPlayer::negamax(Game &game, int depth, int alpha, int beta) {
-    if (depth == 0) return 0;
+    if (depth == 0) return this->evaluate(game);
     std::vector<GameMove> moves = game.getPossibleMoves();
     int size = moves.size();
     if (size == 0) return 0;
@@ -35,6 +35,10 @@ int AiPlayer::negamax(Game &game, int depth, int alpha, int beta) {
     return alpha;
 }
 
+int AiPlayer::evaluate(Game &game) {
+    return 0;
+}
+
 GameMove AiPlayer::askMove(const Game& game) {
     Game aigame = game;
     std::vector<GameMove> moves = aigame.getPossibleMoves();
@@ -50,8 +54,7 @@ GameMove AiPlayer::askMove(const Game& game) {
             } else {
                 aigame.switchPlayer();
 
-                int ret = - this->negamax(aigame, 4, -beta, -alpha);
-
+                int ret = - this->negamax(aigame, 5, -beta, -alpha);
                 if (ret >= beta) return moves[i];
                 if (ret > alpha) {
                     alpha = ret;
