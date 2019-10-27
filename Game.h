@@ -13,12 +13,22 @@ enum GameState {
 
 class Player;
 
+struct PlayerNode {
+    PlayerNode* next;
+    Player* player;
+
+    PlayerNode(Player* player) {
+        this->player = player;
+        this->next = nullptr;
+    }
+};
+
 class Game {
 private:
     Board *board;
     GameState currentState;
     int line;
-    std::queue<Player*> players;
+    PlayerNode* players;
     GameMove playerMove();
     void clearScreen();
     bool checkLine(BoardCell& cell, int row, int column, int rowLimit, int columnLimit,

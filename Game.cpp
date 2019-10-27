@@ -6,8 +6,12 @@
 Game::Game(int boardSize, int line) {
     this->currentState = GameState::PLAYING;
 
-    this->players.push(new HumanPlayer("X"));
-    this->players.push(new AiPlayer("O"));
+    PlayerNode* node = new PlayerNode(new HumanPlayer("X"));
+    PlayerNode* node2 = new PlayerNode(new AiPlayer("O"));
+
+    node->next = node2;
+    node2->next = node;
+    this->players = node;
 
     this->board = new Board(boardSize, boardSize);
     this->line = line;
@@ -22,13 +26,6 @@ Game::Game(const Game &game) {
 
 Game::~Game() {
     delete this->board;
-    /*
-    while(!this->players.empty()) {
-        Player *player = this->players.front();
-        delete player;
-        this->players.pop();
-    }
-    //*/
 }
 
 void Game::clearScreen() {
@@ -36,7 +33,7 @@ void Game::clearScreen() {
 }
 
 Player* Game::getCurrentPlayer() {
-    return this->players.front();
+    return this->players->player;
 }
 
 void Game::run() {
@@ -133,8 +130,9 @@ bool Game::checkLine(GameMove &move, int dRow, int dColumn) {
 // checks only around the cell
 bool Game::hasWon(GameMove& lastMove) {
     // directions:
+    return (
         // left down to right top
-    return ( this->checkLine(lastMove, -1, 1) ||
+        this->checkLine(lastMove, -1, 1) ||
         // left to right
         this->checkLine(lastMove, 0, 1) ||
         // left top to right down
@@ -145,9 +143,7 @@ bool Game::hasWon(GameMove& lastMove) {
 }
 
 void Game::switchPlayer() {
-    Player* p = this->getCurrentPlayer();
-    this->players.pop();
-    this->players.push(p);
+    this->players = this->players->next;
 }
 
 std::vector<GameMove> Game::getPossibleMoves() {
